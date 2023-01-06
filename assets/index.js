@@ -1,16 +1,12 @@
-var APIKey = "64bc025f8b557eda09cfd4307609235d";
+// OpenWeather API
 var baseURL = "https://api.openweathermap.org/data/2.5/forecast"
+// OpenWeatherGeocoder API
 var baseGeoURL = "http://api.openweathermap.org/geo/1.0/direct"
-// ! FORMAT:
-// https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}.
-// ! Geo FORMAT
-// http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key}
+var APIKey = "64bc025f8b557eda09cfd4307609235d";
 
-// ? Use for Lat/long data 
-// use https://openweathermap.org/api/geocoding-api 
-
-// Query Geocoding API for lat/long data 
+// Convert city to lat&lon using Geocoder 
 function getLatLong(city) {
+    console.log("getLatLong function was passed this arg: " + city) // ! Debugging
     let queryURL = baseGeoURL + "?q=" + city + "&limit=1&appid=" + APIKey;
     $.ajax({
         url: queryURL,
@@ -24,20 +20,21 @@ function getLatLong(city) {
 
 // Get weather info
 function getWeatherInfo(geocode) {
-    console.log (geocode);
     let queryURL = baseURL + geocode + "&appid=" + APIKey;
-    console.log (queryURL);
     $.ajax({
         url: queryURL,
         method: "GET"
       })
     .then(function(response) {
             console.log(response)
+            // console.log("current temp: " + list.main.temp)
         })
 }
 
-
-var city = $('#search-input').val();
-console.log ("the city is" + city);
-$('#search-button').on('click', getLatLong("Paris"));
+// Call GetLatLong with search term upon submission
+$('#search-button').on('click', function () {
+    event.preventDefault();
+    var city = $('#search-input').val();
+    getLatLong(city);
+})
 
