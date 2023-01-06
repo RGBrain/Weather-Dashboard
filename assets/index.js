@@ -20,14 +20,20 @@ function getLatLong(city) {
 
 // Get weather info
 function getWeatherInfo(geocode) {
-    let queryURL = baseURL + geocode + "&appid=" + APIKey;
+    let queryURL = baseURL + geocode + "&appid=" + APIKey + "&units=metric";
     $.ajax({
         url: queryURL,
         method: "GET"
       })
     .then(function(response) {
             console.log(response)
-            // console.log("current temp: " + list.main.temp)
+            console.log("city: " + response.city.name)
+            console.log("current temp: " + response.list[0].main.temp)
+            console.log("icon: " + response.list[0].weather.icon)
+            console.log("date/time: " + response.list[0].dt_txt)
+            console.log("wind: " + response.list[0].wind.speed)
+            console.log("Humidity: " + response.list[0].humidity)
+            console.log("date/time (moment.js): " + moment().format('MMMM Do YYYY, h:mm:ss a'))
         })
 }
 
