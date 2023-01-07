@@ -1,19 +1,27 @@
-* {
-    background-color: darkgray;
-}
 
 #search-form {
-    border: red 3px solid;
+    border: #154c79 3px solid;
 }
 
 #today {
-    border: blue 3px solid;
+    border: black 3px solid;
 }
 
 #forecast {
-    border: cyan 3px solid;
+    /* border: #e28743 3px solid; */
 }
 
 .card {
     margin: 0 auto; 
+    background-color: darkblue;
+    color: white;
+}
+
+.lead {
+    padding-top: 20px;
+    font-size: 2em;
+}
+
+.forecast {
+    flex-wrap: wrap;
 }
