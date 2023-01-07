@@ -21,19 +21,32 @@ function getLatLong(city) {
 // Get weather info
 function getWeatherInfo(geocode) {
     let queryURL = baseURL + geocode + "&appid=" + APIKey + "&units=metric";
+    console.log(queryURL)
     $.ajax({
         url: queryURL,
         method: "GET"
       })
     .then(function(response) {
             console.log(response)
+            let cityNameEl = $('<h3>');
+            cityNameEl.text(response.city.name + " " + moment().format('L'))
+            // weather icon
+            let weatherIconEl = $('<img>');
+            weatherIconEl.addClass('src');
+            let wIcon = response.list[0].weather[0].icon;
+            let iconURL = "http://openweathermap.org/img/w/" + wIcon + ".png";
+            weatherIconEl.attr("src", iconURL)
+            console.log("url: " + iconURL);
+            $('#today').append(cityNameEl, weatherIconEl);
+
             console.log("city: " + response.city.name)
+            console.log("weather desc: " + response.list[0].weather.icon)
+            console.log("clouds: " + response.list[0].clouds.all)
             console.log("current temp: " + response.list[0].main.temp)
-            console.log("icon: " + response.list[0].weather.icon)
             console.log("date/time: " + response.list[0].dt_txt)
             console.log("wind: " + response.list[0].wind.speed)
             console.log("Humidity: " + response.list[0].humidity)
-            console.log("date/time (moment.js): " + moment().format('MMMM Do YYYY, h:mm:ss a'))
+            console.log("date/time (moment.js): " + moment().format('L'))
         })
 }
 
