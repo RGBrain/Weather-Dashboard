@@ -37,8 +37,12 @@ function getWeatherInfo(geocode) {
             let iconURL = "http://openweathermap.org/img/w/" + wIcon + ".png";
             weatherIconEl.attr("src", iconURL)
             console.log("url: " + iconURL);
-            $('#today').append(cityNameEl, weatherIconEl);
-
+            //Add temp, wind and humidity
+            let currentTemp = $('<h5>').text("Temp: " + response.list[0].main.temp)  // TODO: ADD DEGREES SYMBOL
+            let currentWind = $('<h5>').text("Wind: " + response.list[0].wind.speed)
+            let currentHumidity = $('<h5>').text("Humidity: " + response.list[0].humidity)
+            
+            $('#today').append(cityNameEl, weatherIconEl, currentTemp, currentWind, currentHumidity);
             console.log("city: " + response.city.name)
             console.log("weather desc: " + response.list[0].weather.icon)
             console.log("clouds: " + response.list[0].clouds.all)
