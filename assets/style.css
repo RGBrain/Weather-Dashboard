@@ -25,3 +25,7 @@
 .forecast {
     flex-wrap: wrap;
 }
+
+.futureDate {
+    padding: 10px;
+}

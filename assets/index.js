@@ -44,6 +44,7 @@ function getWeatherInfo(geocode) {
         method: "GET"
       })
     .then(function(response) {
+            // CURRENT
             console.log(response)
             // City Name
             let cityNameEl = $('<h3>');
@@ -64,25 +65,27 @@ function getWeatherInfo(geocode) {
             let currentHumidity = $('<h5>').text("Humidity: " + response.list[0].main.humidity + " %")
             $('#today').empty();
             $('#today').append(cityNameEl, weatherIconEl, currentTemp, currentWind, currentHumidity);
-            console.log("test1")
-            
+
             // FORECAST
-            // weather icon
-            let futureWeatherIconEl = $('<img>');
-            futureWeatherIconEl.addClass('src');
-            let futurewIcon = response.list[8].weather[0].icon;
-            let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
-            futureWeatherIconEl.attr("src", futureiconURL)
-            //Add temp, wind and humidity
-            let futureDate = getDateFormat(response.list[8].dt_txt);
-            let forecastTemp = $('<h5>').text("Temp: " + response.list[8].main.temp + " ℃")
-            let forecastWind = $('<h5>').text("Wind: " + response.list[8].wind.speed + " m/s")
-            let forecastHumidity = $('<h5>').text("Humidity: " + response.list[8].main.humidity + " %")
-            // Add elements to the card
-            $('.forecast').append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
-            var dateNow = response.list[0].dt_txt
-            var dateNowFormatted = getDateFormat(dateNow);
-            console.log("date/time: " + dateNowFormatted)
+            let cardArray = $('.forecast').children();
+            for (i=0; i < 5; i++) {
+
+                // weather icon
+                let futureWeatherIconEl = $('<img>');
+                futureWeatherIconEl.addClass('src');
+                let futurewIcon = response.list[((i+1) * 8)-1].weather[0].icon;
+                let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
+                futureWeatherIconEl.attr("src", futureiconURL)
+                //Add date, temp, wind and humidity
+                let futureDate = $('<h5>').text(getDateFormat(response.list[((i+1) * 8)-1].dt_txt));
+                futureDate.addClass("futureDate text-left")
+                let forecastTemp = $('<p>').text("Temp: " + response.list[((i+1) * 8)-1].main.temp + " ℃")
+                let forecastWind = $('<p>').text("Wind: " + response.list[((i+1) * 8)-1].wind.speed + " m/s")
+                let forecastHumidity = $('<p>').text("Humidity: " + response.list[((i+1) * 8)-1].main.humidity + " %")
+                // Add elements to the card
+                currentID = '#forecast' + i;
+                $(currentID).append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
+            }
         })
 }
 
