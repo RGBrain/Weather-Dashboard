@@ -28,6 +28,7 @@ function getWeatherInfo(geocode) {
       })
     .then(function(response) {
             console.log(response)
+            // City Name
             let cityNameEl = $('<h3>');
             cityNameEl.text(response.city.name + " " + moment().format('L'))
             // weather icon
@@ -40,22 +41,33 @@ function getWeatherInfo(geocode) {
             //Add temp, wind and humidity
             let currentTemp = $('<h5>').text("Temp: " + response.list[0].main.temp)  // TODO: ADD DEGREES SYMBOL
             let currentWind = $('<h5>').text("Wind: " + response.list[0].wind.speed)
-            let currentHumidity = $('<h5>').text("Humidity: " + response.list[0].humidity)
-            
+            let currentHumidity = $('<h5>').text("Humidity: " + response.list[0].main.humidity)
             $('#today').append(cityNameEl, weatherIconEl, currentTemp, currentWind, currentHumidity);
+            console.log("test1")
+
+            // FORECAST
+            let forecastWind = $('<h5>').text("Wind: " + response.list[8].wind.speed)
+            let forecastHumidity = $('<h5>').text("Humidity: " + response.list[8].main.humidity)
+            
+            var forecastCard = $('#forecast').children();
+            console.log(forecastCard[0]);
+            // // FOR FORECAST CARDS
+            for (i=0; i < 5; i++) {
+                // let forecastTemp = $('<h5>').text("Temp: " + response.list[8].main.temp)  // TODO: ADD DEGREES SYMBOL
+                let forecastTemp = $('<h5>').text(i)  // TODO: ADD DEGREES SYMBOL
+                var currentCard = forecastCard[i]
+                forecastCard.append(forecastWind, cityNameEl);
+                // currentCard.append(forecastTemp, forecastWind, forecastHumidity)
+                // forecastArea.append(cityNameEl);
+            }
             console.log("city: " + response.city.name)
-            console.log("weather desc: " + response.list[0].weather.icon)
-            console.log("clouds: " + response.list[0].clouds.all)
-            console.log("current temp: " + response.list[0].main.temp)
             console.log("date/time: " + response.list[0].dt_txt)
-            console.log("wind: " + response.list[0].wind.speed)
-            console.log("Humidity: " + response.list[0].humidity)
             console.log("date/time (moment.js): " + moment().format('L'))
         })
 }
 
 // Call GetLatLong with search term upon submission
-$('#search-button').on('click', function () {
+$('#search-button').on('click', function (event) {
     event.preventDefault();
     var city = $('#search-input').val();
     getLatLong(city);

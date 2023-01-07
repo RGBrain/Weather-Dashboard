@@ -9,3 +9,11 @@
 #today {
     border: blue 3px solid;
 }
+
+#forecast {
+    border: cyan 3px solid;
+}
+
+.card {
+    margin: 0 auto; 
+}
