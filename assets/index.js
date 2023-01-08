@@ -45,7 +45,14 @@ function getWeatherInfo(geocode) {
       })
     .then(function(response) {
             // CURRENT
-            console.log(response)
+            console.log('response line 48',response)
+
+            // let dayIndex = [0,8,16,24,32,39];
+            // for (let i = 0; i < dayIndex.length; i++) {
+            //     const element = dayIndex[i];
+
+                
+            // }
             // City Name
             let cityNameEl = $('<h3>');
             // Date

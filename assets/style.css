@@ -17,6 +17,7 @@
     color: white;
 }
 
+/* Forecast heading  */
 .lead {
     padding-top: 20px;
     font-size: 2em;
@@ -27,5 +28,5 @@
 }
 
 .futureDate {
-    padding: 10px;
+    padding-top: 10px;
 }
