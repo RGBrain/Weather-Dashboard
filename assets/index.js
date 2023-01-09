@@ -25,9 +25,12 @@ function getDateFormat(date) {
     return [day, month, year].join('/');
     };
 
-// Using local storage for search history
-// let historyArray = JSON.parse(localStorage.getItem("searches"));
+// Inialise search history array 
 let historyArray = [];
+let existingHistory = JSON.parse(localStorage.getItem("searches"));
+if (existingHistory) {
+    historyArray = existingHistory;
+}
 
 // Stores search terms to local storage
 function searchHistory(city) {
@@ -45,7 +48,7 @@ function drawHistoryBtns() {
     // Check that there is some history before starting to draw
     if (searches) {
         for (let i = 0; i < searches.length; i++) {
-            let btnEl = $('<button>')
+            let btnEl = $('<button>');
             let btnText = searches[i];
             btnEl.text(btnText).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", btnText);
             $('#history').prepend(btnEl);
@@ -128,11 +131,12 @@ function getWeatherInfo(geocode) {
                 let forecastHumidity = $('<p>').text("Humidity: " + middayList[j].main.humidity + " %")
 
                 // Create forecast cards
-                let forecastCard = $('<div>').addClass("card col-2").css("height", "20rem");
+                let forecastCard = $('<div>').addClass("card col-2").hide();
                 // Add data to card
                 forecastCard.append(futureDate, formattedFutureHour, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
                 // Add card to forecast section
                 $('#forecast').append(forecastCard)
+                forecastCard.slideDown();
 
             }
         })
