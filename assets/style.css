@@ -7,12 +7,8 @@
     margin: 0 auto; 
     background-color: darkblue;
     color: white;
-}
-
-/* Forecast heading  */
-.lead {
-    padding-top: 20px;
-    font-size: 2em;
+    min-width: 145px;
+    margin-top: 10px;
 }
 
 .futureDate {
@@ -33,4 +29,8 @@
 
 #forecast-title {
     margin-top: 30px;
+}
+
+.city {
+    margin-top: 20px;
 }

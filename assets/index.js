@@ -8,6 +8,11 @@ var APIKey = "64bc025f8b557eda09cfd4307609235d";
 // Get search history from local storage and create buttons accordingly
 drawHistoryBtns();
 
+// Capitalise first letter
+function capitalizeFirstLetter(string){
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 // Date formatting
 function getDateFormat(date) {
     var d = new Date(date),
@@ -78,7 +83,7 @@ function getWeatherInfo(geocode) {
         method: "GET"
       })
     .then(function(response) {
-            let cityNameEl = $('<h3>');
+            let cityNameEl = $('<h3>').addClass("city");
             // Date
             var currentDate = getDateFormat(response.list[0].dt_txt);
             let currentHour = new Date (response.list[0].dt_txt)
@@ -136,7 +141,7 @@ function getWeatherInfo(geocode) {
                 forecastCard.append(futureDate, formattedFutureHour, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
                 // Add card to forecast section
                 $('#forecast').append(forecastCard)
-                forecastCard.slideDown();
+                forecastCard.delay(300).slideDown()
 
             }
         })
@@ -147,7 +152,8 @@ $('#search-button').on('click', function (event) {
     // Check there is some value
     if ($('#search-input').val()) {
     event.preventDefault();
-    var city = $('#search-input').val().trim();
+    var rawCity = $('#search-input').val().trim();
+    var city = capitalizeFirstLetter(rawCity);
     // Clear previous search from input area
     $('#search-input').val("");
     searchHistory(city);
@@ -169,5 +175,6 @@ $(document).on('click', '.prevSearch', function (event) {
 // Clear History button
 $(document).on('click', '#clear-button', function (event) {
     localStorage.clear();  
+    historyArray = []
     drawHistoryBtns();
 })
