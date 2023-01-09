@@ -57,7 +57,10 @@ function getWeatherInfo(geocode) {
             let cityNameEl = $('<h3>');
             // Date
             var currentDate = getDateFormat(response.list[0].dt_txt);
-            cityNameEl.text(response.city.name + " (" + currentDate + ")")
+            let currentHour = new Date (response.list[0].dt_txt)
+            let formattedCurrentHour = currentHour.getHours() + "pm"
+            console.log(currentHour.getHours() + "pm")
+            cityNameEl.text(response.city.name + " (" + currentDate + " - " + formattedCurrentHour + ")")
             console.log(cityNameEl);
             // weather icon
             let weatherIconEl = $('<img>');
@@ -86,23 +89,27 @@ function getWeatherInfo(geocode) {
             console.log(middayList)
 
             let cardArray = $('.forecast').children();
-            for (i=0; i < 5; i++) {
+            for (let j=0; j < middayList.length; j++) {
 
                 // weather icon
                 let futureWeatherIconEl = $('<img>');
                 futureWeatherIconEl.addClass('src');
-                let futurewIcon = response.list[((i+1) * 8)-1].weather[0].icon;
+                let futurewIcon = response.list[j].weather[0].icon;
                 let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
                 futureWeatherIconEl.attr("src", futureiconURL)
                 //Add date, temp, wind and humidity
-                let futureDate = $('<h5>').text(getDateFormat(response.list[((i+1) * 8)-1].dt_txt));
+                let futureDate = $('<h5>').text(getDateFormat(middayList[j].dt_txt));
+                let futureHour = new Date (middayList[j].dt_txt)
+                let formattedFutureHour = $('<h5>').text(futureHour.getHours() + "pm")
+                console.log(futureHour.getHours() + "pm")
+                // $('<h5>').text(middayList[j].dt_txt.getHours())
                 futureDate.addClass("futureDate text-left")
-                let forecastTemp = $('<p>').text("Temp: " + response.list[((i+1) * 8)-1].main.temp + " ℃")
-                let forecastWind = $('<p>').text("Wind: " + response.list[((i+1) * 8)-1].wind.speed + " m/s")
-                let forecastHumidity = $('<p>').text("Humidity: " + response.list[((i+1) * 8)-1].main.humidity + " %")
+                let forecastTemp = $('<p>').text("Temp: " + middayList[j].main.temp + " ℃")
+                let forecastWind = $('<p>').text("Wind: " + middayList[j].wind.speed + " m/s")
+                let forecastHumidity = $('<p>').text("Humidity: " + middayList[j].main.humidity + " %")
                 // Add elements to the card
-                currentID = '#forecast' + i;
-                $(currentID).append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
+                currentID = '#forecast' + j;
+                $(currentID).append(futureDate, formattedFutureHour, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
             }
 
 
