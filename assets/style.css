@@ -1,8 +1,4 @@
 
-#search-form {
-    border: #154c79 3px solid;
-}
-
 #today {
     border: black 3px solid;
 }
@@ -19,21 +15,14 @@
     font-size: 2em;
 }
 
-.forecast {
-    flex-wrap: wrap;
-}
-
 .futureDate {
     padding-top: 10px;
 }
 
 .search-input {
     padding: 5px;
-
 }
 
 .btn {
     margin-top: 10px;
-    /* margin-left: 15px; */
-    /* margin-right: 15px; */
 }

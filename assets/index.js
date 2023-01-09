@@ -19,8 +19,13 @@ function getDateFormat(date) {
     date.toLocaleDateString();
     
     return [day, month, year].join('/');
-    }
-    ;
+    };
+    
+// Add search history button/s
+function searchHistory(city) {
+    let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", city);
+    $('#history').prepend(btnEl);
+}
 
 // Convert city to lat&lon using Geocoder 
 function getLatLong(city) {
@@ -35,25 +40,15 @@ function getLatLong(city) {
         })
 }
 
-// Add search history button/s
-function searchHistory(city) {
-    let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block").attr("data-city", city);
-    $('#history').prepend(btnEl);
-    console.log(btnEl.attr("data-city"))
-}
 
 // Main API Call
 function getWeatherInfo(geocode) {
     let queryURL = baseURL + geocode + "&appid=" + APIKey + "&units=metric";
-    console.log(queryURL)
     $.ajax({
         url: queryURL,
         method: "GET"
       })
     .then(function(response) {
-
-            // CURRENT
-            // City Name
             let cityNameEl = $('<h3>');
             // Date
             var currentDate = getDateFormat(response.list[0].dt_txt);
@@ -70,7 +65,6 @@ function getWeatherInfo(geocode) {
             let wIcon = response.list[0].weather[0].icon;
             let iconURL = "http://openweathermap.org/img/w/" + wIcon + ".png";
             weatherIconEl.attr("src", iconURL)
-            console.log("url: " + iconURL);
             //Add temp, wind and humidity
             let currentTemp = $('<h5>').text("Temp: " + response.list[0].main.temp + " ℃")
             let currentWind = $('<h5>').text("Wind: " + response.list[0].wind.speed + " m/s")
@@ -87,9 +81,11 @@ function getWeatherInfo(geocode) {
                 }
             }
 
+            // Clear previous cards
             $('#forecast').empty();
-            for (let j=0; j < middayList.length; j++) {
 
+            // Create cards
+            for (let j=0; j < middayList.length; j++) {
                 // weather icon
                 let futureWeatherIconEl = $('<img>');
                 futureWeatherIconEl.addClass('src');
@@ -100,8 +96,6 @@ function getWeatherInfo(geocode) {
                 let futureDate = $('<h5>').text(getDateFormat(middayList[j].dt_txt));
                 let futureHour = new Date (middayList[j].dt_txt)
                 let formattedFutureHour = $('<h5>').text(futureHour.getHours() + ":00")
-                console.log(futureHour.getHours() + "pm")
-                // $('<h5>').text(middayList[j].dt_txt.getHours())
                 futureDate.addClass("futureDate text-left")
                 let forecastTemp = $('<p>').text("Temp: " + middayList[j].main.temp + " ℃")
                 let forecastWind = $('<p>').text("Wind: " + middayList[j].wind.speed + " m/s")
@@ -131,3 +125,13 @@ $('#search-button').on('click', function (event) {
     }
 })
 
+// Search using history buttons
+$(document).on('click', '.prevSearch', function (event) {
+    // Check there is some value
+    if ($(this).attr('data-city')) {
+    event.preventDefault();
+    var city = $(this).attr('data-city');
+    // Clear previous search from input area
+    getLatLong(city);
+    }
+})
