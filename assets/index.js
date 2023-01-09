@@ -4,6 +4,10 @@ var baseURL = "https://api.openweathermap.org/data/2.5/forecast"
 var baseGeoURL = "http://api.openweathermap.org/geo/1.0/direct"
 var APIKey = "64bc025f8b557eda09cfd4307609235d";
 
+
+// Get search history from local storage and create buttons accordingly
+drawHistoryBtns();
+
 // Date formatting
 function getDateFormat(date) {
     var d = new Date(date),
@@ -22,8 +26,10 @@ function getDateFormat(date) {
     };
 
 // Using local storage for search history
+// let historyArray = JSON.parse(localStorage.getItem("searches"));
 let historyArray = [];
 
+// Stores search terms to local storage
 function searchHistory(city) {
     historyArray.push(city);
     localStorage.setItem("searches", JSON.stringify(historyArray));
@@ -34,27 +40,18 @@ function searchHistory(city) {
 function drawHistoryBtns() {
     // Clear existing buttons
     $('#history').empty();
-    const searches = localStorage.getItem("searches");
-    console.log(searches)
-    console.log(searches.length)
-    console.log(JSON.stringify(searches[0]))
-    for (let i = 0; i < searches.length; i++) {
-        let btnEl = $('<button>')
-        let btnText = searches;
-        btnEl.text(btnText).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", btnText);
-
-        $('#history').prepend(btnEl);
+    // Create array of previous searches from local storage
+    const searches = JSON.parse(localStorage.getItem("searches"));
+    // Check that there is some history before starting to draw
+    if (searches) {
+        for (let i = 0; i < searches.length; i++) {
+            let btnEl = $('<button>')
+            let btnText = searches[i];
+            btnEl.text(btnText).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", btnText);
+            $('#history').prepend(btnEl);
+        }
     }
 } 
-
-
-// ! Original working code without local storage
-// // Add search history button/s
-// function searchHistory(city) {
-//     let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", city);
-//     $('#history').prepend(btnEl);
-//     // TODO Need to add local storage functionality
-// }
 
 // Convert city to lat&lon using Geocoder 
 function getLatLong(city) {
