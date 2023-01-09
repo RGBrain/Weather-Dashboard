@@ -1,7 +1,7 @@
 // OpenWeather API
 var baseURL = "https://api.openweathermap.org/data/2.5/forecast"
 // OpenWeatherGeocoder API
-var baseGeoURL = "http://api.openweathermap.org/geo/1.0/direct"
+var baseGeoURL = "https://api.openweathermap.org/geo/1.0/direct"
 var APIKey = "64bc025f8b557eda09cfd4307609235d";
 
 
