@@ -74,6 +74,17 @@ function getWeatherInfo(geocode) {
             $('#today').append(cityNameEl, weatherIconEl, currentTemp, currentWind, currentHumidity);
 
             // FORECAST
+
+            // New midday implementation
+            var middayList =[];
+            for (let i=0; i < response.list.length; i++) {
+                let itemTime = new Date (response.list[i].dt_txt);
+                if (itemTime.getHours() === 12) {
+                    middayList.push(response.list[i])
+                }
+            }
+            console.log(middayList)
+
             let cardArray = $('.forecast').children();
             for (i=0; i < 5; i++) {
 
@@ -93,6 +104,30 @@ function getWeatherInfo(geocode) {
                 currentID = '#forecast' + i;
                 $(currentID).append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
             }
+
+
+
+
+            // Original working code
+            // let cardArray = $('.forecast').children();
+            // for (i=0; i < 5; i++) {
+
+            //     // weather icon
+            //     let futureWeatherIconEl = $('<img>');
+            //     futureWeatherIconEl.addClass('src');
+            //     let futurewIcon = response.list[((i+1) * 8)-1].weather[0].icon;
+            //     let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
+            //     futureWeatherIconEl.attr("src", futureiconURL)
+            //     //Add date, temp, wind and humidity
+            //     let futureDate = $('<h5>').text(getDateFormat(response.list[((i+1) * 8)-1].dt_txt));
+            //     futureDate.addClass("futureDate text-left")
+            //     let forecastTemp = $('<p>').text("Temp: " + response.list[((i+1) * 8)-1].main.temp + " ℃")
+            //     let forecastWind = $('<p>').text("Wind: " + response.list[((i+1) * 8)-1].wind.speed + " m/s")
+            //     let forecastHumidity = $('<p>').text("Humidity: " + response.list[((i+1) * 8)-1].main.humidity + " %")
+            //     // Add elements to the card
+            //     currentID = '#forecast' + i;
+            //     $(currentID).append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
+            // }
         })
 }
 
