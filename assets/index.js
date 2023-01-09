@@ -35,7 +35,14 @@ function getLatLong(city) {
         })
 }
 
-// Get weather info
+// Add search history button/s
+function searchHistory(city) {
+    let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block").attr("data-city", city);
+    $('#history').prepend(btnEl);
+    console.log(btnEl.attr("data-city"))
+}
+
+// Main API Call
 function getWeatherInfo(geocode) {
     let queryURL = baseURL + geocode + "&appid=" + APIKey + "&units=metric";
     console.log(queryURL)
@@ -44,24 +51,19 @@ function getWeatherInfo(geocode) {
         method: "GET"
       })
     .then(function(response) {
+
             // CURRENT
-            console.log('response line 48',response)
-
-            // let dayIndex = [0,8,16,24,32,39];
-            // for (let i = 0; i < dayIndex.length; i++) {
-            //     const element = dayIndex[i];
-
-                
-            // }
             // City Name
             let cityNameEl = $('<h3>');
             // Date
             var currentDate = getDateFormat(response.list[0].dt_txt);
             let currentHour = new Date (response.list[0].dt_txt)
-            let formattedCurrentHour = currentHour.getHours() + "pm"
-            console.log(currentHour.getHours() + "pm")
+            let formattedCurrentHour = currentHour.getHours() + ":00"
+            // Add a leading '0' if needed.
+            if (formattedCurrentHour.length == 4) {
+                formattedCurrentHour = "0" + formattedCurrentHour;
+            }
             cityNameEl.text(response.city.name + " (" + currentDate + " - " + formattedCurrentHour + ")")
-            console.log(cityNameEl);
             // weather icon
             let weatherIconEl = $('<img>');
             weatherIconEl.addClass('src');
@@ -77,8 +79,6 @@ function getWeatherInfo(geocode) {
             $('#today').append(cityNameEl, weatherIconEl, currentTemp, currentWind, currentHumidity);
 
             // FORECAST
-
-            // New midday implementation
             var middayList =[];
             for (let i=0; i < response.list.length; i++) {
                 let itemTime = new Date (response.list[i].dt_txt);
@@ -86,9 +86,8 @@ function getWeatherInfo(geocode) {
                     middayList.push(response.list[i])
                 }
             }
-            console.log(middayList)
 
-            let cardArray = $('.forecast').children();
+            $('#forecast').empty();
             for (let j=0; j < middayList.length; j++) {
 
                 // weather icon
@@ -100,48 +99,35 @@ function getWeatherInfo(geocode) {
                 //Add date, temp, wind and humidity
                 let futureDate = $('<h5>').text(getDateFormat(middayList[j].dt_txt));
                 let futureHour = new Date (middayList[j].dt_txt)
-                let formattedFutureHour = $('<h5>').text(futureHour.getHours() + "pm")
+                let formattedFutureHour = $('<h5>').text(futureHour.getHours() + ":00")
                 console.log(futureHour.getHours() + "pm")
                 // $('<h5>').text(middayList[j].dt_txt.getHours())
                 futureDate.addClass("futureDate text-left")
                 let forecastTemp = $('<p>').text("Temp: " + middayList[j].main.temp + " ℃")
                 let forecastWind = $('<p>').text("Wind: " + middayList[j].wind.speed + " m/s")
                 let forecastHumidity = $('<p>').text("Humidity: " + middayList[j].main.humidity + " %")
-                // Add elements to the card
-                currentID = '#forecast' + j;
-                $(currentID).append(futureDate, formattedFutureHour, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
+
+                // Create forecast cards
+                let forecastCard = $('<div>').addClass("card col-2").css("height", "20rem");
+                // Add data to card
+                forecastCard.append(futureDate, formattedFutureHour, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
+                // Add card to forecast section
+                $('#forecast').append(forecastCard)
+
             }
-
-
-
-
-            // Original working code
-            // let cardArray = $('.forecast').children();
-            // for (i=0; i < 5; i++) {
-
-            //     // weather icon
-            //     let futureWeatherIconEl = $('<img>');
-            //     futureWeatherIconEl.addClass('src');
-            //     let futurewIcon = response.list[((i+1) * 8)-1].weather[0].icon;
-            //     let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
-            //     futureWeatherIconEl.attr("src", futureiconURL)
-            //     //Add date, temp, wind and humidity
-            //     let futureDate = $('<h5>').text(getDateFormat(response.list[((i+1) * 8)-1].dt_txt));
-            //     futureDate.addClass("futureDate text-left")
-            //     let forecastTemp = $('<p>').text("Temp: " + response.list[((i+1) * 8)-1].main.temp + " ℃")
-            //     let forecastWind = $('<p>').text("Wind: " + response.list[((i+1) * 8)-1].wind.speed + " m/s")
-            //     let forecastHumidity = $('<p>').text("Humidity: " + response.list[((i+1) * 8)-1].main.humidity + " %")
-            //     // Add elements to the card
-            //     currentID = '#forecast' + i;
-            //     $(currentID).append(futureDate, futureWeatherIconEl, forecastTemp, forecastWind, forecastHumidity);
-            // }
         })
 }
 
 // Call GetLatLong with search term upon submission
 $('#search-button').on('click', function (event) {
+    // Check there is some value
+    if ($('#search-input').val()) {
     event.preventDefault();
-    var city = $('#search-input').val();
+    var city = $('#search-input').val().trim();
+    // Clear previous search from input area
+    $('#search-input').val("");
+    searchHistory(city);
     getLatLong(city);
+    }
 })
 

@@ -7,10 +7,6 @@
     border: black 3px solid;
 }
 
-#forecast {
-    /* border: #e28743 3px solid; */
-}
-
 .card {
     margin: 0 auto; 
     background-color: darkblue;
@@ -29,4 +25,15 @@
 
 .futureDate {
     padding-top: 10px;
+}
+
+.search-input {
+    padding: 5px;
+
+}
+
+.btn {
+    margin-top: 10px;
+    /* margin-left: 15px; */
+    /* margin-right: 15px; */
 }
