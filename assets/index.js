@@ -20,12 +20,41 @@ function getDateFormat(date) {
     
     return [day, month, year].join('/');
     };
-    
-// Add search history button/s
+
+// Using local storage for search history
+let historyArray = [];
+
 function searchHistory(city) {
-    let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", city);
-    $('#history').prepend(btnEl);
+    historyArray.push(city);
+    localStorage.setItem("searches", JSON.stringify(historyArray));
+    drawHistoryBtns();
 }
+
+// Function to draw buttons
+function drawHistoryBtns() {
+    // Clear existing buttons
+    $('#history').empty();
+    const searches = localStorage.getItem("searches");
+    console.log(searches)
+    console.log(searches.length)
+    console.log(JSON.stringify(searches[0]))
+    for (let i = 0; i < searches.length; i++) {
+        let btnEl = $('<button>')
+        let btnText = searches;
+        btnEl.text(btnText).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", btnText);
+
+        $('#history').prepend(btnEl);
+    }
+} 
+
+
+// ! Original working code without local storage
+// // Add search history button/s
+// function searchHistory(city) {
+//     let btnEl = $('<button>').text(city).addClass("btn search-button btn-secondary col-12 btn-block prevSearch").attr("data-city", city);
+//     $('#history').prepend(btnEl);
+//     // TODO Need to add local storage functionality
+// }
 
 // Convert city to lat&lon using Geocoder 
 function getLatLong(city) {
@@ -134,4 +163,10 @@ $(document).on('click', '.prevSearch', function (event) {
     // Clear previous search from input area
     getLatLong(city);
     }
+})
+
+// Clear History button
+$(document).on('click', '#clear-button', function (event) {
+    localStorage.clear();  
+    drawHistoryBtns();
 })
