@@ -109,7 +109,7 @@ function getWeatherInfo(geocode) {
             let weatherIconEl = $('<img>');
             weatherIconEl.addClass('src');
             let wIcon = response.list[0].weather[0].icon;
-            let iconURL = "http://openweathermap.org/img/w/" + wIcon + ".png";
+            let iconURL = "https://openweathermap.org/img/w/" + wIcon + ".png";
             weatherIconEl.attr("src", iconURL)
             //Add temp, wind and humidity
             let currentTemp = $('<h5>').text("Temp: " + response.list[0].main.temp + " ℃")
@@ -135,7 +135,7 @@ function getWeatherInfo(geocode) {
                 let futureWeatherIconEl = $('<img>');
                 futureWeatherIconEl.addClass('src');
                 let futurewIcon = response.list[j].weather[0].icon;
-                let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
+                let futureiconURL = "https://openweathermap.org/img/w/" + futurewIcon + ".png";
                 futureWeatherIconEl.attr("src", futureiconURL)
                 // Add date
                 let futureDate = $('<h5>').text(getDateFormat(middayList[j].dt_txt));
