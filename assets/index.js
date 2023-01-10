@@ -32,6 +32,7 @@ function getDateFormat(date) {
 
 // Inialise search history array 
 let historyArray = [];
+// Check for history in local storage, and get it
 let existingHistory = JSON.parse(localStorage.getItem("searches"));
 if (existingHistory) {
     historyArray = existingHistory;
@@ -39,9 +40,20 @@ if (existingHistory) {
 
 // Stores search terms to local storage
 function searchHistory(city) {
-    historyArray.push(city);
-    localStorage.setItem("searches", JSON.stringify(historyArray));
-    drawHistoryBtns();
+    let alreadyPresent = false;
+        for (let k=0; k < historyArray.length; k++) {
+            if (historyArray[k] === city) {
+                    alreadyPresent = true;
+            }
+        }
+        // Check that city isn't already in history
+        if (alreadyPresent == false) {
+            // Add city to history array
+            historyArray.push(city);
+            // Add city to local storage
+            localStorage.setItem("searches", JSON.stringify(historyArray));
+            drawHistoryBtns();
+        }
 }
 
 // Function to draw buttons
@@ -117,7 +129,6 @@ function getWeatherInfo(geocode) {
 
             // Clear previous cards
             $('#forecast').empty();
-
             // Create cards
             for (let j=0; j < middayList.length; j++) {
                 // weather icon
@@ -126,15 +137,17 @@ function getWeatherInfo(geocode) {
                 let futurewIcon = response.list[j].weather[0].icon;
                 let futureiconURL = "http://openweathermap.org/img/w/" + futurewIcon + ".png";
                 futureWeatherIconEl.attr("src", futureiconURL)
-                //Add date, temp, wind and humidity
+                // Add date
                 let futureDate = $('<h5>').text(getDateFormat(middayList[j].dt_txt));
                 let futureHour = new Date (middayList[j].dt_txt)
                 let formattedFutureHour = $('<h5>').text(futureHour.getHours() + ":00")
                 futureDate.addClass("futureDate text-left")
+                // Add temp
                 let forecastTemp = $('<p>').text("Temp: " + middayList[j].main.temp + " ℃")
+                // Add wind
                 let forecastWind = $('<p>').text("Wind: " + middayList[j].wind.speed + " m/s")
+                // Add Humidity
                 let forecastHumidity = $('<p>').text("Humidity: " + middayList[j].main.humidity + " %")
-
                 // Create forecast cards
                 let forecastCard = $('<div>').addClass("card col-2").hide();
                 // Add data to card
@@ -147,7 +160,7 @@ function getWeatherInfo(geocode) {
         })
 }
 
-// Call GetLatLong with search term upon submission
+// Main Search
 $('#search-button').on('click', function (event) {
     // Check there is some value
     if ($('#search-input').val()) {
@@ -167,7 +180,6 @@ $(document).on('click', '.prevSearch', function (event) {
     if ($(this).attr('data-city')) {
     event.preventDefault();
     var city = $(this).attr('data-city');
-    // Clear previous search from input area
     getLatLong(city);
     }
 })
